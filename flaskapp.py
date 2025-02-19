@@ -8,7 +8,7 @@ app = Flask(_name_)
 BASE_DIR = os.path.dirname(os.path.abspath(_file_))  # Get the absolute directory
 db_path = os.path.join(BASE_DIR, 'edarati.db')
 
-conn = sqlite3.connect(edarati_path) #"/flaskapp/users.db
+conn = sqlite3.connect(db_path) #"/flaskapp/users.db
 c = conn.cursor()
 c.execute('''CREATE TABLE IF NOT EXISTS users 
              (username TEXT, password TEXT, firstname TEXT, lastname TEXT, email TEXT)''')
@@ -27,7 +27,7 @@ def register():
     lastname = request.form['lastname']
     email = request.form['email']
 
-    conn = sqlite3.connect(edarati_path)
+    conn = sqlite3.connect(db_path)
     c = conn.cursor()
     c.execute("INSERT INTO users (username, password, firstname, lastname, email) VALUES (?, ?, ?, ?, ?)",
               (username, password, firstname, lastname, email))
@@ -37,7 +37,7 @@ def register():
     return redirect(url_for('profile', username=username))
 @app.route('/profile/<username>')
 def profile(username):
-    conn = sqlite3.connect(edarati_path)
+    conn = sqlite3.connect(db_path)
     c = conn.cursor()
     c.execute("SELECT * FROM users WHERE username=?", (username,))
     user = c.fetchone()
@@ -50,7 +50,7 @@ def retrieve():
     username = request.form['username']
     password = request.form['password']
 
-    conn = sqlite3.connect(edarati_path)
+    conn = sqlite3.connect(db_path)
     c = conn.cursor()
     c.execute("SELECT * FROM users WHERE username = ? AND password = ?", (username, password))
     user = c.fetchone()
@@ -95,7 +95,7 @@ def signin():
     username = request.form['username']
     password = request.form['password']
 
-    conn = sqlite3.connect(edarati_db)
+    conn = sqlite3.connect(db_path)
     c = conn.cursor()
     c.execute("SELECT * FROM users WHERE username = ? AND password = ?", (username, password))
     user = c.fetchone()
